@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" href="./css/styles.css"> -->
+</head>
+<body>
+	<div class="container mt-5">
+		<div class="row align-items-center">
+			<div class="col-9">
+				<div class="progress">
+					<div id="probar" class="progress-bar progress-bar-striped progress-bar-animated" 
+					role="progressbar" ></div>
+				</div>
+			</div>
+			<div class="col-3">
+				<button class="btn btn-danger bg-danger" increase="1">+1%</button>
+				<button class="btn btn-warning bg-warning" increase="3">+3%</button>
+				<button class="btn btn-success bg-success" increase="7">+7%</button>
+			</div>
+		</div>
+	</div>
+
+
+	<script src="./js/bootstrap.bundle.min.js"></script>
+	<script src="./js/jquery-3.4.1.min.js"></script>
+	<!-- <script src="./js/script.js"></script> -->
+	<script>
+		// создадим переменную и укажем какое-нибудь значение чтобы не допустить его отстутствия в принципе
+		let progressBarWidthInProcents = 0; 		
+		
+		// функция-обработчик для кнопок
+		function btnClick(item) {
+			// Высчитаем новое значение ширины исходя из значения атрибута 'increase' нажатой кнопки
+			console.log('Current:'+ progressBarWidthInProcents);
+			progressBarWidthInProcents += +item.target.attributes['increase'].value; // +(item...) - преобразует строку в число; получаем значение увеличения % от атрибута нажатой кнопки
+			progressBarWidthInProcents %= 100; // Для обнуления при переполнении, сохраняем лишь остаток от деления
+			console.log('New:'+ progressBarWidthInProcents);
+
+			// установим новые значения
+			$('#probar').width(progressBarWidthInProcents + '%'); 
+			$('#probar').html(progressBarWidthInProcents + '%');
+
+			// покрасим progressbar в цвет нажатой кнопки
+			$('#probar').toggleClass("bg-success bg-warning bg-danger", false); // сбросить предыдущее окрашивание
+			const buttonClasses = item.currentTarget.classList; // список классов текущей кнопки
+			$('#probar').toggleClass(buttonClasses[buttonClasses.length-1]); // установить прогрессбару последний класс нажатой кнопки
+		}
+		
+		
+		$(document).ready(function() { 
+				progressBarWidthInProcents = 10; // стартовое состояние
+				
+				$('#probar').width(progressBarWidthInProcents + '%'); // ширина в процентах
+				$('#probar').html(progressBarWidthInProcents + '%'); // подпись внутри прогресбара
+				
+				$('button').click(btnClick); // ко всем элементам <button>			
+			});
+	</script>
+</body>
+</html>
